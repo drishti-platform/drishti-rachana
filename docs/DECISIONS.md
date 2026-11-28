@@ -9,7 +9,7 @@ Name `drishti-rachana`; standalone repository; licence as Drishti Elements; Dris
 vendors pinned releases; usable from Java, JavaScript and Python; one compiler source (Java reference, JavaScript
 build, WebAssembly build for Python), other languages proven by the conformance suite; open specification,
 proprietary runtime; nothing Drishti-specific here (Drishti keeps a profile); generative UI built on Rachana, with a
-tool pack for sajhamcpserver and a generic MCP server; UI speed budgets; desktop hosts: Electron first, then Swing through JCEF, then .NET through WebView2.
+tool pack for sajhamcpserver (the only MCP host); UI speed budgets; desktop hosts: Electron first, then Swing through JCEF, then .NET through WebView2.
 
 ## The Core and profile line
 
@@ -269,7 +269,7 @@ The placement of the live-table engine is decided: **(a) Rachana, as the JVM mod
 
 ### AI kit and MCP moved to the AI release (owner, 2026-11-21)
 
-The Rachana AI kit (prompt kit, validate-and-fix loop, evaluation harness) and the MCP tools (the generic Rachana MCP server, the sajhamcpserver tool pack) leave i7b G2 and are built in Drishti's GenAI release (i10 after the renumbering). The Studio's "describe a screen" command bar stays in the Studio design as a placeholder until then.
+The Rachana AI kit (prompt kit, validate-and-fix loop, evaluation harness) and the MCP tools (the sajhamcpserver tool pack) leave i7b G2 and are built in Drishti's GenAI release (i10 after the renumbering). The Studio's "describe a screen" command bar stays in the Studio design as a placeholder until then.
 
 ### Desktop hosts deferred (owner, 2026-11-21)
 

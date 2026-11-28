@@ -60,6 +60,12 @@ public final class TypedFragment {
     /** The value types (DESIGN.md (libraries) 4.2; X8's type language without {@code fn}, which waits for lambdas, X13). */
     public static final Set<String> VALUE_TYPES = Ordered.set("text", "number", "integer", "decimal", "boolean", "date", "datetime", "duration", "money");
     /** The name types: checked tokens. */
+    /**
+     * The one parameter name with a meaning of its own: a fragment that declares {@code id} (type {@code id}, optional) lets a use name its first
+     * panel exactly ({@code with: { id: holidays }} gives the panel {@code holidays}, not {@code <as>-table}), so a screen converted to the
+     * fragment keeps the ids its function keys, events and links name. A use that does not give it is scoped as before.
+     */
+    private static final String PANEL_ID = "id";
     public static final Set<String> NAME_TYPES = Ordered.set("id", "format", "tone", "icon", "variant", "area", "palette", "key", "enum", "columns");
     /** The name types that name the user's state or selection (DESIGN.md (libraries) 6.3), written beside {@link #NAME_TYPES}. */
     static final Set<String> HANDED_TYPES = Ordered.set("state", "selection");
@@ -909,8 +915,11 @@ public final class TypedFragment {
                         + " never reads " + local, sutraFile, mappedAt.get(t)));
             }
         }));
+        PNode ownId = params.containsKey(PANEL_ID) ? tokens.get(PANEL_ID) : null;   // the use keeps its panel's own id (see PANEL_ID)
+        if (as != null || ownId != null) {
+            panels = scoped(panels, own, as, ownId == null ? null : ownId.text());
+        }
         if (as != null) {
-            panels = scoped(panels, own, as);
             panels = NestedUses.prefixed(panels, own, as, NestedUses.names(root.map().get("panels")));   // a nested use is <as>-<its as>
         }
         String scope = as;
@@ -1232,12 +1241,13 @@ public final class TypedFragment {
     }
 
     /** The fragment's own panels with ids scoped to the use ({@code <as>-<id>}) and their reads of each other ({@code @id}) moved with them. */
-    private static List<PNode> scoped(List<PNode> panels, List<Boolean> own, String as) {
+    private static List<PNode> scoped(List<PNode> panels, List<Boolean> own, String as, String exact) {
         Map<String, String> ids = new LinkedHashMap<>();
         for (int i = 0; i < panels.size(); i++) {
             PNode id = own.get(i) && panels.get(i).isMap() ? panels.get(i).map().get("id") : null;
             if (id != null && id.text() != null) {
-                ids.put(id.text(), as + "-" + id.text());
+                // the fragment's first panel takes the use's own id exactly when it gave one; every other panel is <as>-<id>
+                ids.put(id.text(), exact != null && ids.isEmpty() ? exact : as == null ? id.text() : as + "-" + id.text());
             }
         }
         List<PNode> out = new ArrayList<>();

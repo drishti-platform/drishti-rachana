@@ -102,9 +102,9 @@ flask --app app run
 ```
 
 The tiles and the bar chart come from `sales`; change the function's rows and reload. Make the table live with `@rachana.live("sales")`
-(a generator of `(key, row)` changes) and the page updates without a reload: see [the live board tutorial](tutorials/PYTHON_APP.md).
+(a generator of `(key, row)` changes) and the page updates without a reload: see [the live board tutorial](TUTORIAL.md#part-4-a-live-board-in-flask).
 
 ## Next
 
 - The JavaScript side in a single-page app: [Rachana in a JavaScript SPA](RACHANA_IN_SPA.md).
-- The Data Protocol your tables speak: [guide](guides/DATA_PROTOCOL.md). FastAPI works the same way (`RachanaRouter`).
+- The Data Protocol your tables speak: [guide](../spec/1/PROTOCOL.md). FastAPI works the same way (`RachanaRouter`).

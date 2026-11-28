@@ -47,6 +47,7 @@ class CoreFragmentParamsTest {
             data:
               orders: { rows: [ { ORDER_ID: A1, AMT_USD: 120 }, { ORDER_ID: A2, AMT_USD: 0 }, { ORDER_ID: A3, AMT_USD: 80 } ] }
               company: { rows: [ { FOUNDED: 1999, STAFF: 4200 } ] }
+              firm: { rows: [ { name: Acme, subtitle: Maker, status: ok, FOUNDED: 1999 } ] }
               legs: { rows: [ { LEG: 1, LABEL: Fixed }, { LEG: 2, LABEL: Floating } ] }
             panels:
             """;
@@ -114,5 +115,39 @@ class CoreFragmentParamsTest {
                         - { id: terms, kind: kv, columns: [ { label: Type, bind: "@.LABEL" } ] }
                 """);
         assertTrue(v.contains("Leg 1 - Fixed") && v.contains("Leg 2 - Floating") && v.contains("Floating") && v.contains("\"key\":\"F4\""), v);
+    }
+
+    @Test
+    void aUseKeepsItsOwnPanelIdWhenItGivesOne() throws Exception {
+        String table = view(HEAD + """
+                  - use: core/data-table@1
+                    as: holidays
+                    with: { id: holidays, rows: $.orders, columns: [ { label: Order, bind: "@.ORDER_ID" } ], key: F5 }
+                """);
+        assertTrue(table.contains("\"id\":\"holidays\"") && !table.contains("holidays-table"), table);
+        String card = view(HEAD + """
+                  - use: core/record-card@1
+                    as: company
+                    with:
+                      id: company
+                      record: "$.firm[0]"
+                      facts: [ { label: Founded, bind: "@.FOUNDED" } ]
+                """);
+        assertTrue(card.contains("\"id\":\"company\"") && card.contains("company-state") && !card.contains("company-card"), card);
+        String tabs = view(HEAD + """
+                  - use: core/tabbed-views@1
+                    as: legs
+                    with: { id: legs, each: $.legs, tab-title: "lambda p: 'Leg ' + p.LEG" }
+                    slots:
+                      body:
+                        - { id: terms, kind: kv, columns: [ { label: Type, bind: "@.LABEL" } ] }
+                """);
+        assertTrue(tabs.contains("\"id\":\"legs\"") && !tabs.contains("legs-views"), tabs);
+        String scoped = view(HEAD + """
+                  - use: core/data-table@1
+                    as: plain
+                    with: { rows: $.orders, columns: [ { label: Order, bind: "@.ORDER_ID" } ] }
+                """);
+        assertTrue(scoped.contains("\"id\":\"plain-table\""), scoped);
     }
 }

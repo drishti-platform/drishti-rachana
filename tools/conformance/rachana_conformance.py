@@ -310,7 +310,7 @@ def run(a) -> int:
             if wanted(cid, only) and (not kinds or c["kind"] in kinds):
                 todo.append((p, suite, doc, merged(doc, c), cid))
     proc = subprocess.Popen(shlex.split(a.cmd), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=sys.stderr, text=True, encoding="utf-8")
-    proc.stdin.write(json.dumps({"rachana-conformance": 1, "language": a.language, "profiles": a.profiles.split(",")}) + "\n")
+    proc.stdin.write(json.dumps({"rachana-conformance": 1, "profiles": a.profiles.split(",")} | ({"language": a.language} if a.language else {})) + "\n")
     proc.stdin.flush()
     hello = json.loads(proc.stdout.readline() or "{}")
     runtime = hello.get("runtime", a.runtime or "unknown")
@@ -371,7 +371,7 @@ def run(a) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("".join(r + "\n" for r in results), encoding="utf-8", newline="\n")
     summ = Path(a.summary or out.with_suffix("").with_suffix(".summary.json"))
-    summ.write_text(json.dumps({"runtime": runtime, "runtimeVersion": hello.get("runtimeVersion"), "language": a.language, "profiles": a.profiles.split(","),
+    summ.write_text(json.dumps({"runtime": runtime, "runtimeVersion": hello.get("runtimeVersion"), "language": a.language or hello.get("language"), "profiles": a.profiles.split(","),
                                 "cases": len(todo), **counts, "unverifiedFailing": unverified_failing, "failures": failures, "millis": int((time.time() - t0) * 1000)},
                                indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     if a.record:
@@ -422,7 +422,7 @@ def main(argv=None) -> int:
     ap.add_argument("--out")
     ap.add_argument("--summary")
     ap.add_argument("--profiles", default="core")
-    ap.add_argument("--language", default="1.0")
+    ap.add_argument("--language", default=None, help="the language level run; default the runtime's own")
     ap.add_argument("--only")
     ap.add_argument("--kinds")
     ap.add_argument("--record", action="store_true")

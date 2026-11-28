@@ -82,4 +82,4 @@ and no inline script; add the origin of a separate Data Protocol host to `connec
 ## Next
 
 - Without a framework wrapper, mount `<rachana-view>` in a component and set its `sutra` property from state (React: a `ref`; Vue: a template ref).
-- The Data Protocol: [guide](guides/DATA_PROTOCOL.md). The element's full attribute list is the header of `src/rachana_view.js`.
+- The Data Protocol: [guide](../spec/1/PROTOCOL.md). The element's full attribute list is the header of `src/rachana_view.js`.

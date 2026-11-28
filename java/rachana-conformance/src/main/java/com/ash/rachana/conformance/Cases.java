@@ -38,7 +38,7 @@ public final class Cases {
 
     /** The runtime's greeting line (RUNNER 5) for a runtime name ({@code jvm}, {@code node}, {@code chromium}...). */
     public static String hello(String runtime) {
-        return "{\"runtime\":" + str(runtime) + ",\"runtimeVersion\":\"rachana-" + VERSION + "\",\"language\":\"1.0\",\"profiles\":" + jsonList(profiles)
+        return "{\"runtime\":" + str(runtime) + ",\"runtimeVersion\":\"rachana-" + VERSION + "\",\"language\":\"" + com.ash.rachana.profile.Grammar.LEVEL + "\",\"profiles\":" + jsonList(profiles)
                 + ",\"kinds\":[\"expr\",\"expr-error\",\"check\",\"grammar\",\"format\",\"problem\",\"edit\",\"sutra\",\"patch\",\"fire\",\"plan\",\"lib\",\"live\"]}";
     }
 

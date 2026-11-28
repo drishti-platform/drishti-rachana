@@ -2,8 +2,7 @@
 # The GenUI kit: design
 
 Status: **kit lite written** (`tools/sajha/`, tested on its own); the compiler's doc lint and schema written, to be built. This
-document is the architecture; [AI_GENUI](AI_GENUI.md) remains the longer plan (prompt kit, evaluation harness, the generic MCP
-server) and this kit is its first host. How to use it: [tools/sajha/docs/GENUI_GUIDE.md](../tools/sajha/docs/GENUI_GUIDE.md).
+document is the architecture; [AI_GENUI](AI_GENUI.md) remains the longer plan (prompt kit, evaluation harness) and this kit is its first host. How to use it: [tools/sajha/docs/GENUI_GUIDE.md](../tools/sajha/docs/GENUI_GUIDE.md).
 
 ## 1. The idea: a market of one
 
@@ -120,7 +119,6 @@ its rows) and board view is an event `rachana.genui.<kind>` with the caller, to 
 | SAJHA plugin (first) | the folder under `config/plugins/`; the board server inside SAJHA's process; the board server has no sign-in of its own: behind SAJHA's proxy and sign-in, or on a loopback or private interface (section 4) |
 | Plain Python app | the tool classes called directly, data functions registered (`rows.register_tool`) |
 | Drishti (later, i9) | the same check and catalogue in process (Java: `DocBlockLint`, the library reader); boards as ephemeral Sutras reading Drishti's tables as the viewer |
-| Generic MCP server (AI_GENUI 4.6) | the same contracts over stdio/HTTP; next |
 | Air-gapped | nothing fetched at run time: libraries, assets and bundle are local files |
 
 ## 7. What is open

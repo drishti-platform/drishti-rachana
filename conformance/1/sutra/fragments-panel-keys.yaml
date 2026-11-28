@@ -122,3 +122,45 @@ cases:
         /panels/0/data/tabs/1/title: Leg 2 - Floating
         /panels/0/data/tabs/1/panels/0/id: terms
         /panels/0/data/tabs/1/panels/0/data/fields/0/text: Floating
+
+  - id: a-use-keeps-its-own-panel-id-when-it-gives-one
+    kind: sutra
+    source: "LIBRARIES 4.2 (the parameter id); core/data-table 1.1"
+    files:
+      id-table.v1.fragment.yaml: |
+        rachana: 1.2
+        fragment: id-table
+        version: 1
+        doc:
+          summary: Rows whose panel id the caller may fix.
+        params:
+          rows: { type: table, required: true, doc: The rows, columns: { id: { type: text, doc: An id } } }
+          id:   { type: id, optional: true, doc: The panel's own id }
+        panels:
+          - id: list
+            kind: table
+            rows: arg.rows
+            columns: [ { label: Id, bind: "@.id" } ]
+          - id: note
+            kind: status
+            fields: [ { label: State, bind: "'ok'" } ]
+    sutra: |
+      rachana: 1.2
+      sutra: panel-id-demo
+      version: 1
+      title: { id: "'Demo'" }
+      data:
+        t: { rows: [ { id: A } ] }
+      panels:
+        - use: id-table@1
+          as: holidays
+          with: { rows: $.t, id: holidays }
+        - use: id-table@1
+          as: plain
+          with: { rows: $.t }
+    expect:
+      at:
+        /panels/0/id: holidays
+        /panels/1/id: holidays-note
+        /panels/2/id: plain-list
+        /panels/3/id: plain-note

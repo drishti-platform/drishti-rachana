@@ -4,7 +4,7 @@
 For architects, senior technology managers and senior developers. Five chapters: why, the architecture, how an agent composes a
 screen, one worked example, and where it applies. The detail lives elsewhere and is linked, not repeated: the kit's design
 ([GENUI_KIT](GENUI_KIT.md)), the guide for agent builders ([GENUI_GUIDE](../tools/sajha/docs/GENUI_GUIDE.md)), the tools'
-contracts ([TOOLS](../tools/sajha/docs/TOOLS.md)), the libraries ([LIBRARIES](LIBRARIES.md)) and the longer plan
+contracts ([TOOLS](../tools/sajha/docs/TOOLS.md)), the libraries ([LIBRARIES](DESIGN.md#sutra-libraries-the-fragment-library-framework)) and the longer plan
 ([AI_GENUI](AI_GENUI.md)).
 
 | Chapter | The one thing to take away |
@@ -116,7 +116,7 @@ Three contracts hold the parts together, each with a schema and conformance case
 * **The ViewModel** (Drishti's `docs/architecture/VIEWMODEL.md`): the compiled screen as data, with every value already
   formatted and every mask already applied; the painter walks it and evaluates nothing. The same contract feeds Drishti's own
   console and its embedding elements, so a generated board and a product screen look and behave alike.
-* **The Data Protocol** ([spec/1/data-protocol](../spec/1/data-protocol/PROTOCOL.md)): tables, schema, query with a filter
+* **The Data Protocol** ([spec/1/data-protocol](../spec/1/PROTOCOL.md)): tables, schema, query with a filter
   that travels as a syntax tree (never text), live changes. Authentication and authorisation stay the host's.
 
 Arrow Flight, Drishti's door for notebooks, services and BI tools, is a third way out of the same lake with the same
@@ -220,7 +220,7 @@ A Sutra names a library by major (`libraries: [core@1, finance@1]`) and a fragme
 major a fragment is frozen: the same parameters and data give the same ViewModel, checked mechanically against stored goldens.
 Each library carries a SHA-384 per file; a deployment chooses which libraries an agent may use. So a board composed today
 paints the same tomorrow, and a firm reviews a library once, not every screen made from it. Exact-version lock files and
-publisher signatures are part of the library framework ([LIBRARIES](LIBRARIES.md) 9 and 12).
+publisher signatures are part of the library framework ([LIBRARIES](DESIGN.md#sutra-libraries-the-fragment-library-framework) 9 and 12).
 
 ### 3.5 Why infinitely many UIs stay safe
 
@@ -385,12 +385,11 @@ Next, in the order the design gives them ([GENUI_KIT](GENUI_KIT.md) 7, [AI_GENUI
 1. The Maven build and suites for the doc lint; the kit asking the compiler for the lint.
 2. The browser check of the board page.
 3. A run against a live SAJHA and a Drishti Data Protocol host; the news view in the example.
-4. A generic MCP server with the same contracts, for agents outside SAJHA.
-5. The same catalogue and check inside Drishti, with boards as short-lived Sutras reading Drishti's tables as the viewer.
-6. `doc` blocks on Drishti's own Sutras, so the product's screens become parts an agent can find.
-7. An evaluation set (how often a first draft passes, how many fixes, whether the board answers the question), the prompt
+4. The same catalogue and check inside Drishti, with boards as short-lived Sutras reading Drishti's tables as the viewer.
+5. `doc` blocks on Drishti's own Sutras, so the product's screens become parts an agent can find.
+6. An evaluation set (how often a first draft passes, how many fixes, whether the board answers the question), the prompt
    kit, and per-user preference memory.
-8. Domain libraries beyond `core` and `finance`.
+7. Domain libraries beyond `core` and `finance`.
 
 **Known limit worth stating.** Shape search maps columns by name semantics first (exact, synonym, shared words: a headline column
 called `TITLE` beside a text column `PUBLISHER` maps `headline` to `TITLE`, `source` to `PUBLISHER`), and by type only for a required

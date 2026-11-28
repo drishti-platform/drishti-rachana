@@ -123,8 +123,8 @@ levels with `--check` for a build; `status: draft | active | deprecated`, `repla
 
 ## 3. The MCP tools and the evaluation harness
 
-Generative UI is built on Rachana, not inside it: the language has no AI key and the compiler calls no model. The GenUI kit ships with
-Rachana 1.1.0, not in this release line; this is what it still has to deliver beyond the first tools.
+Generative UI is built on Rachana, not inside it: the language has no AI key and the compiler calls no model. The GenUI kit (`tools/sajha/`) has its first tools;
+this is what it still has to deliver beyond them.
 
 - The kit's **MCP tools ship only as a sajhamcpserver plugin** (`tools/sajha/`: `search_fragments`, `get_fragment`, `check_sutra`,
   `publish_ui`; owner decision, 2026-11-28). There is no standalone Rachana MCP server and no `drishti-rachana-mcp` package: the

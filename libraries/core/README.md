@@ -108,6 +108,7 @@ A record as a card, with its name, a line under it, chosen facts and a status; t
 | `code` | text | optional. A short tag shown at the right of the card's header, such as a mnemonic |
 | `when` | boolean | optional. A condition: the card (and its status) is left out where it is false |
 | `span` | integer | optional. The width in grid columns (1 to 12) on a wide screen |
+| `id` | id | optional. The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-card |
 
 Slots: `footer`
 
@@ -140,6 +141,7 @@ One tab for each element of a list, each tab holding the panels you give, read a
 | `code` | text | optional. A short tag shown at the right of the panel's header, such as a mnemonic |
 | `when` | boolean | optional. A condition: the panel is left out, with no empty box, where it is false |
 | `span` | integer | optional. The width in grid columns (1 to 12) on a wide screen |
+| `id` | id | optional. The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-views |
 
 Slots: `body`
 
@@ -165,6 +167,7 @@ A sortable, searchable table of rows with the columns you give, totals and a row
 | `when` | boolean | optional. A condition: the table is left out, with no empty box, where it is false |
 | `span` | integer | optional. The width in grid columns (1 to 12) on a wide screen |
 | `where` | fn(record{}) -> boolean | optional. A condition each row must meet to be shown: lambda r: r.AMT_USD > 0 |
+| `id` | id | optional. The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-table |
 
 Example: `examples/data-table.sutra.yaml`.
 

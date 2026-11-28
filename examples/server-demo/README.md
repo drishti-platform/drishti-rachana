@@ -32,15 +32,15 @@ cd drishti-platform/drishti-rachana/java
 ./mvnw clean package -DskipTests -pl rachana-server -am
 ```
 
-This writes `java\rachana-server\target\rachana-server-1.0.1-all.jar` (the version is the one in `java/pom.xml`).
+This writes `java\rachana-server\target\rachana-server-1.1.1-all.jar` (the version is the one in `java/pom.xml`).
 
 ## Run
 
 From `drishti-platform\drishti-rachana` (Linux and macOS: forward slashes):
 
 ```
-java -jar java\rachana-server\target\rachana-server-1.0.1-all.jar check --config examples\server-demo\rachana-server.yaml
-java -jar java\rachana-server\target\rachana-server-1.0.1-all.jar serve --config examples\server-demo\rachana-server.yaml
+java -jar java\rachana-server\target\rachana-server-1.1.1-all.jar check --config examples\server-demo\rachana-server.yaml
+java -jar java\rachana-server\target\rachana-server-1.1.1-all.jar serve --config examples\server-demo\rachana-server.yaml
 ```
 
 `check` prints the resolved settings and any problem, and starts nothing. `serve` prints `rachana-server listening on
