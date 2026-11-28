@@ -123,9 +123,50 @@ cases:
         /panels/0/data/tabs/1/panels/0/id: terms
         /panels/0/data/tabs/1/panels/0/data/fields/0/text: Floating
 
-  - id: a-use-keeps-its-own-panel-id-when-it-gives-one
+  - id: a-defaulted-id-parameter-is-scoped-to-each-use
     kind: sutra
-    source: "LIBRARIES 4.2 (the parameter id); core/data-table 1.1"
+    source: "LIBRARIES 4.2 (as: scopes every panel id); a parameter named id is an ordinary name parameter"
+    files:
+      named-table.v1.fragment.yaml: |
+        rachana: 1.2
+        fragment: named-table
+        version: 1
+        doc:
+          summary: A table whose panel id is a parameter.
+        params:
+          rows: { type: table, required: true, doc: The rows, columns: { id: { type: text, doc: An id } } }
+          id:   { type: id, default: figure, doc: The panel's id }
+        panels:
+          - id: "%{id}"
+            kind: table
+            rows: arg.rows
+            columns: [ { label: Id, bind: "@.id" } ]
+    sutra: |
+      rachana: 1.2
+      sutra: panel-id-default
+      version: 1
+      title: { id: "'Demo'" }
+      data:
+        t: { rows: [ { id: A } ] }
+      panels:
+        - use: named-table@1
+          as: a
+          with: { rows: $.t }
+        - use: named-table@1
+          as: b
+          with: { rows: $.t }
+        - use: named-table@1
+          as: c
+          with: { rows: $.t, id: mine }
+    expect:
+      at:
+        /panels/0/id: a-figure
+        /panels/1/id: b-figure
+        /panels/2/id: c-mine
+
+  - id: a-use-keeps-its-own-panel-id-when-the-fragment-opts-in
+    kind: sutra
+    source: "LIBRARIES 4.2 (panel-id: true); core/data-table 1.1"
     files:
       id-table.v1.fragment.yaml: |
         rachana: 1.2
@@ -135,7 +176,7 @@ cases:
           summary: Rows whose panel id the caller may fix.
         params:
           rows: { type: table, required: true, doc: The rows, columns: { id: { type: text, doc: An id } } }
-          id:   { type: id, optional: true, doc: The panel's own id }
+          id:   { type: id, optional: true, panel-id: true, doc: The panel's own id }
         panels:
           - id: list
             kind: table

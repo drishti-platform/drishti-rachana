@@ -571,9 +571,11 @@ Rules:
 5. At most 40 parameters. A fragment that wants more is two fragments.
 6. Every parameter has a `doc` of one line; the docstring lint (`RCH-2055`) requires it.
 7. A declaration takes only its keys: a parameter `type`, `doc`, `default`, `required`, `optional`, `columns`, `contract`, `min`,
-   `max`, `options`, `pattern`, `max-rows`, `live`, `key`, `window`, `dynamic`, `of`; a column `type`, `doc`, `optional`. Any other
+   `max`, `options`, `pattern`, `max-rows`, `live`, `key`, `window`, `dynamic`, `of`, `panel-id`; a column `type`, `doc`, `optional`. Any other
    is `RCH-2048`. In a flow mapping (`{ type: number, doc: ... }`) a text with a comma is quoted: unquoted, `doc: The change,
    written beside it` is the doc "The change" and a key "written beside it", which the manifest would carry as such.
+8. One parameter of type `id` may carry `panel-id: true`: the value a use itself gives (never the default) is then the exact id of the fragment's first
+   panel, which `as:` does not prefix (otherwise every id is `<as>-<id>`, 7.2); `core/data-table`, `core/record-card` and `core/tabbed-views` do so with `id`.
 
 Every fragment also accepts the **placement words** on the use itself, with no declaration: `as` (7.2), `title`,
 `area`, `span`, `when`, `key`, `requires`, `variant`, `load`, `a11y`. They apply to the fragment's root: its single
@@ -796,7 +798,8 @@ panels:
 ```
 
 - `as:` names one use, like a variable holding a call's result: every id the fragment brings becomes
-  `<as>-<id>` (a dot is not an id character), its events are read as `@<as>.<event>.<field>`. Two uses of one fragment
+  `<as>-<id>` (a dot is not an id character; the one exception is a parameter of type `id` that the fragment marks `panel-id: true`: when the
+  use itself gives it, the fragment's first panel takes that id exactly), its events are read as `@<as>.<event>.<field>`. Two uses of one fragment
   are two instances only with `as:`; without it the second use's ids collide (`RCH-2024`).
 - `with:` is checked against the parameter declarations: an unknown key is `RCH-2114` with the valid names; a
   missing required one `RCH-2115`; a wrong type `RCH-2116`.

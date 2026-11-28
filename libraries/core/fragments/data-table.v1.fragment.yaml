@@ -41,7 +41,7 @@ params:
   when:        { type: boolean, optional: true, doc: "A condition: the table is left out, with no empty box, where it is false" }
   span:        { type: integer, min: 1, max: 12, optional: true, doc: "The width in grid columns (1 to 12) on a wide screen" }
   where:       { type: "fn(record{}) -> boolean", optional: true, doc: "A condition each row must meet to be shown: lambda r: r.AMT_USD > 0" }
-  id:          { type: id, optional: true, doc: "The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-table" }
+  id:          { type: id, optional: true, panel-id: true, doc: "The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-table" }
 panels:
   - id: table
     kind: table

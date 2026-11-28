@@ -59,13 +59,14 @@ public final class TypedFragment {
 
     /** The value types (DESIGN.md (libraries) 4.2; X8's type language without {@code fn}, which waits for lambdas, X13). */
     public static final Set<String> VALUE_TYPES = Ordered.set("text", "number", "integer", "decimal", "boolean", "date", "datetime", "duration", "money");
-    /** The name types: checked tokens. */
     /**
-     * The one parameter name with a meaning of its own: a fragment that declares {@code id} (type {@code id}, optional) lets a use name its first
-     * panel exactly ({@code with: { id: holidays }} gives the panel {@code holidays}, not {@code <as>-table}), so a screen converted to the
-     * fragment keeps the ids its function keys, events and links name. A use that does not give it is scoped as before.
+     * The parameter key {@code panel-id: true}, which a fragment sets on one parameter of type {@code id} to let a use name the fragment's first
+     * panel exactly: {@code with: { id: holidays }} gives the panel {@code holidays}, not {@code <as>-table}, so a screen converted to the
+     * fragment keeps the ids its function keys, events and links name. Only a value the use itself gives counts (never the default), and only a
+     * fragment that sets the key behaves so: every other panel id of every other fragment is {@code <as>-<id>}.
      */
-    private static final String PANEL_ID = "id";
+    static final String PANEL_ID = "panel-id";
+    /** The name types: checked tokens. */
     public static final Set<String> NAME_TYPES = Ordered.set("id", "format", "tone", "icon", "variant", "area", "palette", "key", "enum", "columns");
     /** The name types that name the user's state or selection (DESIGN.md (libraries) 6.3), written beside {@link #NAME_TYPES}. */
     static final Set<String> HANDED_TYPES = Ordered.set("state", "selection");
@@ -215,7 +216,7 @@ public final class TypedFragment {
 
     /** The keys a parameter declaration takes (DESIGN.md (libraries) 4.2 and 5.1); any other is refused, never read as part of the interface. */
     static final Set<String> PARAM_KEYS = Ordered.set("type", "doc", "default", "required", "optional", "columns", "contract", "min", "max",
-            "options", "pattern", "max-rows", "live", "key", "window", "dynamic", "of");
+            "options", "pattern", "max-rows", "live", "key", "window", "dynamic", "of", "panel-id");
 
     /** The keys a column of a table parameter takes (DESIGN.md (libraries) 5.1). */
     static final Set<String> COLUMN_KEYS = Ordered.set("type", "doc", "optional");
@@ -915,7 +916,7 @@ public final class TypedFragment {
                         + " never reads " + local, sutraFile, mappedAt.get(t)));
             }
         }));
-        PNode ownId = params.containsKey(PANEL_ID) ? tokens.get(PANEL_ID) : null;   // the use keeps its panel's own id (see PANEL_ID)
+        PNode ownId = givenPanelId(with);                   // the use keeps its panel's own id (see PANEL_ID)
         if (as != null || ownId != null) {
             panels = scoped(panels, own, as, ownId == null ? null : ownId.text());
         }
@@ -1238,6 +1239,17 @@ public final class TypedFragment {
             return new PNode(bind && !plain ? "@['" + theirs + "']" : theirs, v.line(), v.column());   // a bind is an expression: bid-size is a minus
         }
         return columns(v, table, Set.of(), false, expr, cols, out);
+    }
+
+    /** The id a use gives to the parameter that opts in with {@code panel-id: true} (never a default), or null. */
+    private PNode givenPanelId(Map<String, PNode> with) {
+        for (Param p : params.values()) {
+            PNode flag = p.at() == null || !p.at().isMap() ? null : p.at().map().get(PANEL_ID);
+            if (flag != null && Boolean.TRUE.equals(flag.value()) && with.get(p.name()) != null && with.get(p.name()).text() != null) {
+                return with.get(p.name());
+            }
+        }
+        return null;
     }
 
     /** The fragment's own panels with ids scoped to the use ({@code <as>-<id>}) and their reads of each other ({@code @id}) moved with them. */

@@ -32,7 +32,7 @@ params:
   code:   { type: text, optional: true, doc: "A short tag shown at the right of the card's header, such as a mnemonic" }
   when:   { type: boolean, optional: true, doc: "A condition: the card (and its status) is left out where it is false" }
   span:   { type: integer, min: 1, max: 12, optional: true, doc: "The width in grid columns (1 to 12) on a wide screen" }
-  id:          { type: id, optional: true, doc: "The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-card" }
+  id:          { type: id, optional: true, panel-id: true, doc: "The panel's own id, exactly as written (not scoped to the use's as:), so function keys, events and links name it; when not given the id is <as>-card" }
 slots:
   footer: { accepts: panels, max: 2, doc: Panels under the card }
 panels:
